@@ -28,8 +28,6 @@ struct dinfo
 	int  car_counter = 0;
 }driver;
 
-
-
 void Register();
 void search_dc(char pd);
 void fine_check();
@@ -81,30 +79,39 @@ int main()
 }
 
 void Register() {
-	cout << " Enter your name : ";
-	cin >> driver_name;
-	driver.name[driver.car_counter] = driver_name;
-	cout << "\n Enter license number : ";
-	cin >> driver.license_number[driver.car_counter];
-	cout << "\n Enter Birthdate : ";
-	cin >> driver.birthdate[driver.car_counter];
-	do {
+	
+		cout << " Enter your name : ";
+		cin >> driver_name;
 		driver.name[driver.car_counter] = driver_name;
-		cout << " Enter a car : ";
-		cin >> rcars;
-		cout << " plate number : ";
-		cin >> plate_number;
-		cout << endl;
-		driver.cars[driver.car_counter] = rcars;
-		driver.car_plate[driver.car_counter] = plate_number;
-		driver.car_counter++;
-		char choice;
-		cout << "Do you want to register another car (y/n) : ";
-		cin >> choice;
-		if (choice != 'y' || choice == 'Y') {
+		cout << "\n Enter license number : ";
+		cin >> driver.license_number[driver.car_counter];
+		cout << "\n Enter Birthdate : ";
+		cin >> driver.birthdate[driver.car_counter];
+		do {
+			if (driver.car_counter <= 3) {
+				driver.name[driver.car_counter] = driver_name;
+				cout << " Enter a car : ";
+				cin >> rcars;
+				cout << " plate number : ";
+				cin >> plate_number;
+				cout << endl;
+				driver.cars[driver.car_counter] = rcars;
+				driver.car_plate[driver.car_counter] = plate_number;
+				driver.car_counter++;
+			}
+			else {
+		     cout << "cars limit excideed\n";
 			return;
-		}
-	} while (true);
+	        }
+			char choice;
+			cout << "Do you want to register another car (y/n) : ";
+			cin >> choice;
+			if (choice != 'y' || choice == 'Y') {
+				return;
+			}
+		} while (true);
+
+	
 	
 }
 
