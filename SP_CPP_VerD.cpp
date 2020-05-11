@@ -199,7 +199,7 @@ void search_dc(char pd ) {
 }
 //to check the fines of driver 
 void fine_check() {
-	cout << "Enter your name : "; 
+	cout << " Enter your name : "; 
 	cin >> driver_name;
 	
 	for (int i = 0; i < person_counter ; i++) {
@@ -216,10 +216,10 @@ void fine_check() {
 	
 	
 	char choice;
-	cout << "Do you want check for another one fines (y/n) : ";
+	cout << "Do you want to pay your fine (y/n) : ";
 	cin >> choice;
 	if (choice == 'y' || choice == 'Y') {
-		fine_check();
+		pay_fine();
 	}
 	else { cout << "\n"; return; }
 	
@@ -237,11 +237,14 @@ void pay_fine() {
 		}
 	}
 	do {
-		cout << " pay your fine : " << "( " << sum_of_fines << " ) : ";
-		cin >> fine_payer;
-		if (fine_payer != sum_of_fines) {
-			cout << " Enter the total value.... \n";
+		if (sum_of_fines > 0) {
+			cout << " pay your fine : " << "( " << sum_of_fines << " ) : ";
+			cin >> fine_payer;
+			if (fine_payer != sum_of_fines) {
+				cout << " Enter the right value.... \n";
+			}
 		}
+		else { cout << " There's no fines on you.... \n"; return; }
 	} while (fine_payer != sum_of_fines);
 	cout << " your fine paid successfully...\n\n ";
 	for (int i = 0; i < person_counter; i++) {
