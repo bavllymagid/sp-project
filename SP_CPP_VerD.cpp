@@ -28,6 +28,8 @@ struct dinfo
 	int  car_counter = 0;
 }driver;
 
+int person_counter=0; 
+
 void Register();
 void search_dc(char pd);
 void fine_check();
@@ -82,27 +84,36 @@ void Register() {
 	
 		cout << " Enter your name : ";
 		cin >> driver_name;
-		driver.name[driver.car_counter] = driver_name;
 		cout << "\n Enter license number : ";
-		cin >> driver.license_number[driver.car_counter];
+		cin >> driver.license_number[person_counter];
 		cout << "\n Enter Birthdate : ";
-		cin >> driver.birthdate[driver.car_counter];
+		cin >> driver.birthdate[person_counter];
+		///to count the number of cars user have 
+		for (int i = 0; i < person_counter; i++) {
+		    if (driver_name == driver.name[i]) {
+                 driver.car_counter++;
+		    }
+	    }
+		
 		do {
-			if (driver.car_counter <= 3) {
-				driver.name[driver.car_counter] = driver_name;
+			if (driver.car_counter <3) {
+				driver.name[person_counter] = driver_name;
 				cout << " Enter a car : ";
 				cin >> rcars;
 				cout << " plate number : ";
 				cin >> plate_number;
 				cout << endl;
-				driver.cars[driver.car_counter] = rcars;
-				driver.car_plate[driver.car_counter] = plate_number;
+				driver.cars[person_counter] = rcars;
+				driver.car_plate[person_counter] = plate_number;
+				person_counter++;
 				driver.car_counter++;
 			}
 			else {
-		     cout << "cars limit excideed\n";
+		     cout << " cars limit excideed.......\n";
+			 driver.car_counter = 0;
 			return;
 	        }
+			
 			char choice;
 			cout << "Do you want to register another car (y/n) : ";
 			cin >> choice;
@@ -117,23 +128,26 @@ void Register() {
 
 void search_dc(char pd ) {
 	char choice;
+	bool found = true ;
 	if (pd == 'd') {
 		cout << " Enter a name : ";
 		cin >> driver_name;
 		/// to display the driver 1 
-		for (int i = 0; i < driver.car_counter; i++) {
+		for (int i = 0; i <person_counter; i++) {
 		    if (driver_name == driver.name[i]) {
 			cout << " Name : " << driver.name[i] << "\n license number : " << driver.license_number[i] << "\n Birthdate : " << driver.birthdate[i] << "\n His cars : ";
-			     for (int i = 0; i < driver.car_counter; i++) {
-				   cout << " " << driver.cars[i] << ",";
+			     for (int i = 0; i < person_counter; i++) {
+					 if (driver_name == driver.name[i]) {
+						 cout << " " << driver.cars[i] << ",";
+					 }
 			     }
+				 found = true;
 				 break;
-			}
-			else {
+			} 	
+		}
+		if(!found) {
 				cout << "\nthere's no driver with that name,please register your name ";
-			}
-	    }
-		
+		} 	
 	}
 
 	if (pd == 'p') {
@@ -141,7 +155,7 @@ void search_dc(char pd ) {
 		cin >> plate_number;
 		/////////////  display the cars of driver 1
 		
-	    for (int i = 0; i < driver.car_counter; i++)
+	    for (int i = 0; i < person_counter; i++)
 		{
 		     if (plate_number == driver.car_plate[i]) 
 			 {
@@ -170,7 +184,7 @@ void fine_check() {
 	cout << "Enter your name : "; 
 	cin >> driver_name;
 	
-	for (int i = 0; i < driver.car_counter; i++) {
+	for (int i = 0; i < person_counter ; i++) {
 		if (driver_name == driver.name[i]) {
 			cout << " " << driver.cars[i] << " fines : " << driver.fine.finesd1[i] << endl;
 		}
@@ -192,7 +206,28 @@ void fine_check() {
 }
 
 void pay_fine() {
-
+	int fine_payer;
+	int sum_of_fines=0;
+	cout << "Enter your name : ";
+	cin >> driver_name;
+	for (int i = 0; i < person_counter; i++) {
+		if (driver_name == driver.name[i]) {
+			sum_of_fines += driver.fine.finesd1[i];
+		}
+	}
+	do {
+		cout << " pay your fine : " << "( " << sum_of_fines << " ) : ";
+		cin >> fine_payer;
+		if (fine_payer != sum_of_fines) {
+			cout << " Enter the total value.... \n";
+		}
+	} while (fine_payer != sum_of_fines);
+	cout << " your fine paid succesfully...\n ";
+	for (int i = 0; i < person_counter; i++) {
+		if (driver_name == driver.name[i]) {
+		 driver.fine.finesd1[i] = 0 ;
+		}
+	}
 }
 
 
