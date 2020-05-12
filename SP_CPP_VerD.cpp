@@ -18,7 +18,9 @@ struct fines
 	string road[100];
 	string date[100];
 	string time[100];
-};
+	string plate[100];
+	int fine_index=0;
+}fine;
 ///information of drivers ///////////////////
 struct dinfo
 {
@@ -27,7 +29,6 @@ struct dinfo
 	string birthdate[100];
 	string cars[100];
 	string car_plate[100];
-	fines fine;
 	int  car_counter = 0;
 }driver;
 // to count the drivers the user enters  
@@ -103,7 +104,9 @@ void Register() {
 		///to count the number of cars user have 
 		for (int i = 0; i < person_counter; i++) {
 		    if (driver_name == driver.name[i]) {
-                 driver.car_counter++;
+				
+					driver.car_counter++;
+				
 		    }
 	    }
 		
@@ -141,16 +144,19 @@ void Register() {
 void search_dc(char pd ) {
 	char choice;
 	bool found = true ;
+	int cnt = 0;
 	if (pd == 'd') {
 		cout << " Enter a name : ";
 		cin >> driver_name;
 		/// to display the driver 1 
-		for (int i = 0; i <person_counter; i++) {
+		for (int i = 0; i <=person_counter; i++) {
 			if (driver_name == driver.name[i]) {
 				cout << " Name : " << driver.name[i] << "\n license number : " << driver.license_number[i] << "\n Birthdate : " << driver.birthdate[i] << "\n His cars : ";
 				for (int i = 0; i < person_counter; i++) {
 					if (driver_name == driver.name[i]) {
-						cout << " " << driver.cars[i] << ",";
+						if (driver.cars[i] != "") {
+							cout << " " << driver.cars[i] << ",";
+						}
 					}
 				}
 				found = true;
@@ -167,23 +173,31 @@ void search_dc(char pd ) {
 		cout << " Enter plate number :  ";
 		cin >> plate_number;
 		/////////////  display the cars of driver 1
-		
+		int sum_fine = 0;
 	    for (int i = 0; i < person_counter; i++)
 		{
 		     if (plate_number == driver.car_plate[i]) 
 			 {
 				cout << " Car : " << driver.cars[i] << "\n Fines on car : ";
-				cout << " " << driver.fine.finesd1[i] << " ";
+				for (int j = 0; j < fine.fine_index; j++) {
+					if (driver.car_plate[i] == fine.plate[j]) {
+						sum_fine += fine.finesd1[j];
+						
+					}
+				}
+				cout << " " << sum_fine << " ";
 				cout  <<  "\n Owner : " << driver.name[i];
 				found = true;	
+				cnt++;
 			 }
-			 else found = false;
+			
 			 
 		}
-		if (!found || person_counter == 0) {
+		if (cnt==0 || person_counter == 0) {
 			cout << "\n there's no car with that plate number ,please register a car ";
-		}
+		}sum_fine = 0;
 	}
+	
 	cout << "\n\n Search for another car or return to main menu : (s/m)";
 	cin >> choice;
 	if (choice == 's') {
@@ -201,19 +215,24 @@ void search_dc(char pd ) {
 void fine_check() {
 	cout << " Enter your name : "; 
 	cin >> driver_name;
-	
+	int found = 0;
 	for (int i = 0; i < person_counter ; i++) {
 		if (driver_name == driver.name[i]) {
-			cout << " " << driver.cars[i] << " fines : " << driver.fine.finesd1[i] << endl;
-			if (driver.fine.finesd1[i] != 0) {
-				cout << " Recorded in " << driver.fine.road[i] << " on " << driver.fine.date[i] << " at " << driver.fine.time[i] << endl;
-		}
+			for (int j = 0; j < fine.fine_index; j++) {
+				if (driver.car_plate[i]==fine.plate[j]) {
+					cout << " " << driver.cars[i] << " fines : " << fine.finesd1[j] << endl;
+					cout << " Recorded in " << fine.road[j] << " on " << fine.date[j] << " at " << fine.time[j] << endl;
+					found++;
+				}
+			}
 		}
 	}
 		if (person_counter == 0) {
 			cout << "there's no cars,please register your car.\n\n";
 		}
-	
+		if (found==0) {
+			cout << " There's no fines on you.... \n\n";
+		}
 	
 	char choice;
 	cout << "Do you want to pay your fine (y/n) : ";
@@ -231,9 +250,13 @@ void pay_fine() {
 	int sum_of_fines=0;
 	cout << "Enter your name : ";
 	cin >> driver_name;
-	for (int i = 0; i < person_counter; i++) {
+	for (int i = 0; i <= person_counter; i++) {
 		if (driver_name == driver.name[i]) {
-			sum_of_fines += driver.fine.finesd1[i];
+			for (int j = 0; j < fine.fine_index; j++) {
+				if (driver.car_plate[i] == fine.plate[j]) {
+					sum_of_fines += fine.finesd1[j];
+				}
+			}
 		}
 	}
 	do {
@@ -244,24 +267,25 @@ void pay_fine() {
 				cout << " Enter the right value.... \n";
 			}
 		}
-		else { cout << " There's no fines on you.... \n"; return; }
+		else { cout << " There's no fines on you.... \n\n"; return; }
 	} while (fine_payer != sum_of_fines);
 	cout << " your fine paid successfully...\n\n ";
-	for (int i = 0; i < person_counter; i++) {
+	for (int i = 0; i <= person_counter; i++) {
 		if (driver_name == driver.name[i]) {
-		 driver.fine.finesd1[i] = 0 ;
+			for (int j = 0; j < fine.fine_index; j++) {
+				if (driver.car_plate[i] == fine.plate[j]) {
+					 fine.finesd1[j]=0;
+				}
+			}
 		}
 	}
+	sum_of_fines = 0;
 }
 /// to record a fine on the driver 
 void record_fine() {
 	char choice;
-		int sum_of_fines = 0;
-		int speed;
-		string road;
-		string date;
-		string time;
-		int found = 0;
+		int speed,found = 0 ;
+		string road,name,car,date,time;
 	do {
 		cout << " Enter a plate number : ";
 		cin >> plate_number;
@@ -276,23 +300,28 @@ void record_fine() {
 		for (int i = 0; i < person_counter; i++) {
 			if (plate_number == driver.car_plate[i]) {
 				if (speed > road1_speed && speed < road2_speed) {
-					driver.fine.finesd1[i] = 2*abs(speed - road1_speed);
-					driver.fine.road[i] = road;
-					driver.fine.date[i] = date;
-					driver.fine.time[i] = time;
-					found = 1;
-				}
+					fine.plate[fine.fine_index] = plate_number;
+					fine.finesd1[fine.fine_index] = 2 * abs(speed - road1_speed);
+					fine.road[fine.fine_index] = road;
+					fine.date[fine.fine_index] = date;
+					fine.time[fine.fine_index] = time;
+				    found = 1;	
+					fine.fine_index++;
+		        }
+
 				if (speed > road2_speed) {
-					driver.fine.finesd1[i] = 2*abs(speed - road2_speed);
-					driver.fine.road[i] = road;
-					driver.fine.date[i] = date;
-					driver.fine.time[i] = time;
+					fine.plate[fine.fine_index] = plate_number;
+					fine.finesd1[fine.fine_index] = 2 * abs(speed - road2_speed);
+					fine.road[fine.fine_index] = road;
+					fine.date[fine.fine_index] = date;
+					fine.time[fine.fine_index] = time;
 					found = 1;
+					fine.fine_index++;
 				}
-			
-			}
-			
+			}	
 		}
+	
+		
 		if (found < 1 || person_counter == 0) {
 			cout << " Enter a valid plate number..... \n";
 		}
