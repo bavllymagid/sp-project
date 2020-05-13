@@ -4,31 +4,33 @@
 #define road2_speed 100
 
 using namespace std;
-// chars for some coices 
+    // chars for some coices 
 	char state , driver_officer_choice , plate_or_driver  ;
 	/// to choose the name of driver or plate number 
 	string driver_name , plate_number;
 	string rcars;
+	//// to determine if the fine is baid or not 
+	bool paid = false ;
 
 //// fines struct 
 struct fines
 {
 /// the stored fines of drivers
-	int finesd1[100];
-	string road[100];
-	string date[100];
-	string time[100];
-	string plate[100];
+	int finesd1[200];
+	string road[200];
+	string date[200];
+	string time[200];
+	string plate[200];
 	int fine_index=0;
 }fine;
 ///information of drivers ///////////////////
 struct dinfo
 {
-	string name[100];
-	string license_number[100];
-	string birthdate[100];
-	string cars[100];
-	string car_plate[100];
+	string name[200];
+	string license_number[200];
+	string birthdate[200];
+	string cars[200];
+	string car_plate[200];
 	int  car_counter = 0;
 }driver;
 // to count the drivers the user enters  
@@ -95,7 +97,7 @@ int main()
 /// to register a new driver 
 void Register() {
 	
-		cout << " Enter your name : ";
+		cout << " Enter your name (without spaces) : ";
 		cin >> driver_name;
 		cout << "\n Enter license number : ";
 		cin >> driver.license_number[person_counter];
@@ -125,7 +127,7 @@ void Register() {
 			}
 			else {
 		     cout << " cars limit excideed.......\n";
-			 driver.car_counter = 0;
+			
 			return;
 	        }
 			
@@ -133,10 +135,11 @@ void Register() {
 			cout << "Do you want to register another car (y/n) : ";
 			cin >> choice;
 			if (choice != 'y' || choice == 'Y') {
+				driver.car_counter = 0;
 				return;
 			}
 		} while (true);
-
+        
 	
 	
 }
@@ -187,13 +190,19 @@ void search_dc(char pd ) {
 				}
 				cout << " " << sum_fine << " ";
 				cout  <<  "\n Owner : " << driver.name[i];
-				found = true;	
-				cnt++;
-			 }
-			
-			 
+				
+			 }	 
 		}
-		if (cnt==0 || person_counter == 0) {
+		//// to check if the plate number is found in the system 
+		for (int i = 0; i < person_counter; i++)
+		{
+			if (plate_number == driver.car_plate[i])
+			{
+				cnt++;
+				break;
+			}
+		}
+		if (cnt<1|| person_counter == 0) {
 			cout << "\n there's no car with that plate number ,please register a car ";
 		}sum_fine = 0;
 	}
@@ -219,19 +228,27 @@ void fine_check() {
 	for (int i = 0; i < person_counter ; i++) {
 		if (driver_name == driver.name[i]) {
 			for (int j = 0; j < fine.fine_index; j++) {
-				if (driver.car_plate[i]==fine.plate[j]) {
+				if (driver.car_plate[i] == fine.plate[j]) {
+					if (fine.finesd1[j] == 0) {
+						paid = true;
+					}
+					if (!paid) {
 					cout << " " << driver.cars[i] << " fines : " << fine.finesd1[j] << endl;
 					cout << " Recorded in " << fine.road[j] << " on " << fine.date[j] << " at " << fine.time[j] << endl;
+					}
+					else {
+						cout << " " << driver.cars[i] << " fines : " << fine.finesd1[j] << " (paid) "<< endl;
+						cout << " Recorded in " << fine.road[j] << " on " << fine.date[j] << " at " << fine.time[j] << endl;
+					}
+					paid = false;
 					found++;
 				}
 			}
 		}
 	}
-		if (person_counter == 0) {
-			cout << "there's no cars,please register your car.\n\n";
-		}
-		if (found==0) {
+	 if (found==0) {
 			cout << " There's no fines on you.... \n\n";
+			return;
 		}
 	
 	char choice;
@@ -240,7 +257,7 @@ void fine_check() {
 	if (choice == 'y' || choice == 'Y') {
 		pay_fine();
 	}
-	else { cout << "\n"; return; }
+	else { cout << "\n";  }
 	
 	
 }
@@ -256,6 +273,7 @@ void pay_fine() {
 				if (driver.car_plate[i] == fine.plate[j]) {
 					sum_of_fines += fine.finesd1[j];
 				}
+				
 			}
 		}
 	}
@@ -305,7 +323,6 @@ void record_fine() {
 					fine.road[fine.fine_index] = road;
 					fine.date[fine.fine_index] = date;
 					fine.time[fine.fine_index] = time;
-				    found = 1;	
 					fine.fine_index++;
 		        }
 
@@ -315,14 +332,22 @@ void record_fine() {
 					fine.road[fine.fine_index] = road;
 					fine.date[fine.fine_index] = date;
 					fine.time[fine.fine_index] = time;
-					found = 1;
 					fine.fine_index++;
 				}
 			}	
 		}
-	
-		
-		if (found < 1 || person_counter == 0) {
+		//to check if the plate number is saved in the system or not /////////
+		for (int i = 0; i < person_counter; i++) {
+			if (plate_number == driver.car_plate[i]) {
+				found = 1;
+				break;
+			}
+			else {
+				found = 0;
+			}
+		}
+        
+		if (found<1 || person_counter == 0) {
 			cout << " Enter a valid plate number..... \n";
 		}
 		else {
