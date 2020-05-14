@@ -26,6 +26,8 @@ struct dinfo
 	string birthdate[200];
 	string cars[200];
 	string car_plate[200];
+	string model[200];
+	string production_year[200];
 	int  car_counter = 0;
 }driver;
 
@@ -115,6 +117,10 @@ void Register() {
 				cin >> rcars;
 				cout << " plate number : ";
 				cin >> plate_number;
+				cout << " Model of car : ";
+				cin >> driver.model[person_counter];
+				cout << " Production year of car : ";
+				cin >> driver.production_year[person_counter];
 				cout << endl;
 				driver.cars[person_counter] = rcars;
 				driver.car_plate[person_counter] = plate_number;
@@ -179,7 +185,7 @@ void search_dc(char pd ) {
 		{
 		     if (plate_number == driver.car_plate[i]) 
 			 {
-				cout << " Car : " << driver.cars[i] << "\n Fines on car : ";
+				cout << " Car : " << driver.cars[i] << "\n Model : " <<driver.model[i]<< "\n Production year : "<<driver.production_year[i]<< "\n Fines on car : ";
 				for (int j = 0; j < fine.fine_index; j++) {
 					if (driver.car_plate[i] == fine.plate[j]) {
 						sum_fine += fine.finesd1[j];
