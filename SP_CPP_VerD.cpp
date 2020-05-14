@@ -1,17 +1,14 @@
 #include <iostream>
 #include <string>
-#define road1_speed 80
-#define road2_speed 100
+
 
 using namespace std;
-    // chars for some coices 
-	char state , driver_officer_choice , plate_or_driver  ;
-	/// to choose the name of driver or plate number 
-	string driver_name , plate_number;
-	string rcars;
-	//// to determine if the fine is baid or not 
-	bool paid = false ;
-
+/// to choose the name of driver or plate number 
+string driver_name , plate_number,rcars;
+//// to determine if the fine is baid or not 
+bool paid = false ;
+// to count the drivers the user enters  
+int person_counter=0; 
 //// fines struct 
 struct fines
 {
@@ -33,8 +30,7 @@ struct dinfo
 	string car_plate[200];
 	int  car_counter = 0;
 }driver;
-// to count the drivers the user enters  
-int person_counter=0; 
+
 
 void Register();
 void search_dc(char pd);
@@ -43,7 +39,8 @@ void pay_fine();
 void record_fine();
 
 int main()
-{
+{     // chars for some coices 
+	char state, plate_or_driver,driver_officer_choice ;
 	do {
 		cout << "      Welcome in traffic system      " << endl;
 		if (driver.name[0]=="") {
@@ -149,6 +146,7 @@ void search_dc(char pd ) {
 	char choice;
 	bool found = true ;
 	int cnt = 0;
+	do{
 	if (pd == 'd') {
 		cout << " Enter a name : ";
 		cin.ignore();
@@ -208,19 +206,10 @@ void search_dc(char pd ) {
 			cout << "\n there's no car with that plate number ,please register a car ";
 		}sum_fine = 0;
 	}
-	
+	//to determine how user want to search 
 	cout << "\n\n Search for another car or return to main menu : (s/m)";
 	cin >> choice;
-	if (choice == 's') {
-		//to determine how user want to search 
-		cout << " [d] Driver name\n [p] car plate\n\n Your answer : ";
-		cin >> pd;
-		search_dc(pd);
-	}
-	else {
-		cout << "\n\n";
-		return;
-	}
+	} while (choice == 's');			
 }
 //to check the fines of driver 
 void fine_check() {
@@ -306,38 +295,31 @@ void pay_fine() {
 /// to record a fine on the driver 
 void record_fine() {
 	char choice;
-		int speed,found = 0 ;
-		string road,name,car,date,time;
+		int speed,found = 0, road_speed;
+		string road,date,time;
 	do {
 		cout << " Enter a plate number : ";
 		cin >> plate_number;
 		cout << " enter the road : ";
 		cin >> road;
-		cout << " enter the speed of the car (bigger than 80 for trucks)(bigger than 100 for cars) : ";
+		cout << " enter the speed of the car  : ";
 		cin >> speed;
+		cout << " Enter road speed : ";
+		cin >> road_speed;
 		cout << " Enter the date (day/month/year) : ";
 		cin >> date;
-		cout << " Enter the time (hour/minute) : ";
+		cout << " Enter the time (hour:minute) : ";
 		cin >> time;
 		for (int i = 0; i < person_counter; i++) {
 			if (plate_number == driver.car_plate[i]) {
-				if (speed > road1_speed && speed < road2_speed) {
+				if (speed > road_speed ) {
 					fine.plate[fine.fine_index] = plate_number;
-					fine.finesd1[fine.fine_index] = 2 * abs(speed - road1_speed);
+					fine.finesd1[fine.fine_index] = 2 * abs(speed - road_speed);
 					fine.road[fine.fine_index] = road;
 					fine.date[fine.fine_index] = date;
 					fine.time[fine.fine_index] = time;
 					fine.fine_index++;
 		        }
-
-				if (speed > road2_speed) {
-					fine.plate[fine.fine_index] = plate_number;
-					fine.finesd1[fine.fine_index] = 2 * abs(speed - road2_speed);
-					fine.road[fine.fine_index] = road;
-					fine.date[fine.fine_index] = date;
-					fine.time[fine.fine_index] = time;
-					fine.fine_index++;
-				}
 			}	
 		}
 		//to check if the plate number is saved in the system or not /////////
