@@ -1,7 +1,5 @@
 #include <iostream>
 #include <string>
-
-
 using namespace std;
 /// to choose the name of driver or plate number 
 string driver_name , plate_number,rcars;
@@ -30,7 +28,6 @@ struct dinfo
 	string car_plate[200];
 	int  car_counter = 0;
 }driver;
-
 
 void Register();
 void search_dc(char pd);
@@ -100,7 +97,8 @@ void Register() {
 		cout << "\n Enter license number : ";
 		cin >> driver.license_number[person_counter];
 		cout << "\n Enter Birthdate (day/month/year) : ";
-		cin >> driver.birthdate[person_counter];
+		cin.ignore();
+		getline(cin,driver.birthdate[person_counter]);
 		///to count the number of cars user have 
 		for (int i = 0; i < person_counter; i++) {
 		    if (driver_name == driver.name[i]) {
@@ -300,16 +298,18 @@ void record_fine() {
 	do {
 		cout << " Enter a plate number : ";
 		cin >> plate_number;
-		cout << " enter the road : ";
-		cin >> road;
+		cout << " enter the road name : ";
+		cin.ignore();
+		getline(cin, road);
 		cout << " enter the speed of the car  : ";
 		cin >> speed;
 		cout << " Enter road speed : ";
 		cin >> road_speed;
 		cout << " Enter the date (day/month/year) : ";
-		cin >> date;
+		cin.ignore();
+		getline(cin, date);
 		cout << " Enter the time (hour:minute) : ";
-		cin >> time;
+		getline(cin, time);
 		for (int i = 0; i < person_counter; i++) {
 			if (plate_number == driver.car_plate[i]) {
 				if (speed > road_speed ) {
