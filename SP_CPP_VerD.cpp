@@ -53,7 +53,7 @@ int main()
 		cin >> state;
 		//checks if the user is driver and to enter his choice
 		if (state == 'D' || state == 'd') {
-			cout << " [r] Register a car\n [c] Check your fines\n [p] Pay a fine\n [s] Search for a car/diver\n\n Your answer : ";
+			cout << "\n [r] Register a car\n [c] Check your fines\n [p] Pay a fine\n [s] Search for a car/diver\n\n Your answer : ";
 			cin >> driver_officer_choice;
 			if (driver_officer_choice == 's' || driver_officer_choice == 'S') {
 				//to determine how user want to search 
@@ -96,9 +96,10 @@ int main()
 }
 /// to register a new driver 
 void Register() {
-	
-		cout << " Enter your name (without spaces) : ";
-		cin >> driver_name;
+
+		cout << " Enter your name : ";
+		cin.ignore();
+        getline(cin, driver_name);
 		cout << "\n Enter license number : ";
 		cin >> driver.license_number[person_counter];
 		cout << "\n Enter Birthdate (day/month/year) : ";
@@ -150,7 +151,8 @@ void search_dc(char pd ) {
 	int cnt = 0;
 	if (pd == 'd') {
 		cout << " Enter a name : ";
-		cin >> driver_name;
+		cin.ignore();
+		getline(cin, driver_name);
 		/// to display the driver 1 
 		for (int i = 0; i <=person_counter; i++) {
 			if (driver_name == driver.name[i]) {
@@ -223,7 +225,8 @@ void search_dc(char pd ) {
 //to check the fines of driver 
 void fine_check() {
 	cout << " Enter your name : "; 
-	cin >> driver_name;
+	cin.ignore();
+	getline(cin, driver_name);
 	int found = 0;
 	for (int i = 0; i < person_counter ; i++) {
 		if (driver_name == driver.name[i]) {
@@ -266,7 +269,8 @@ void pay_fine() {
 	int fine_payer;
 	int sum_of_fines=0;
 	cout << "Enter your name : ";
-	cin >> driver_name;
+	cin.ignore();
+	getline(cin, driver_name);
 	for (int i = 0; i <= person_counter; i++) {
 		if (driver_name == driver.name[i]) {
 			for (int j = 0; j < fine.fine_index; j++) {
@@ -313,7 +317,7 @@ void record_fine() {
 		cin >> speed;
 		cout << " Enter the date (day/month/year) : ";
 		cin >> date;
-		cout << " Enter the time (hour/minute) ";
+		cout << " Enter the time (hour/minute) : ";
 		cin >> time;
 		for (int i = 0; i < person_counter; i++) {
 			if (plate_number == driver.car_plate[i]) {
